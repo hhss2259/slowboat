@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!--css reset-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
+    <!--fontawesome-->
+    <script src="https://kit.fontawesome.com/792b7e4f23.js" crossorigin="anonymous"></script>
+    <!--Spoca Hans Sans Neo-->
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
+
+
+    <link rel ="stylesheet" href="../static/css/common/basic.css"/> 
+    <link rel ="stylesheet" href="../static/css/main.css"/>
+
+</head>
+<body>
+    <header>
+        <div class="inner">
+            <div class="header-container">
+                <div class="nav-container">
+                    <div class="nav-menu">
+                        메인화면
+                    </div>
+                    <div class="nav-menu">
+                        카테고리
+                    </div>
+                    <div class="nav-menu">
+                        내 정보
+                    </div>
+                </div>
+                <div class="header-title">
+                    삶을 더 풍요롭게
+                </div>
+                <div class="header-content">
+                    아름다운 한글 글귀를 모아보세요!
+                </div>
+            </div>
+        </div>
+    </header>
+    <section>
+        <div class="inner">
+            <div class="main-container">
+                <div class="main-title">
+                    <img class="surfing" src="../static/img/surfing.png" alt="surfing">
+                    <div class=main-title-message>최신 글귀</div>
+                </div>
+                <div class="main-content">
+                    <img class="arrow" src="../static/img/arrow-left.png" alt="arrow">
+                    <div class="card-window">
+                    <div class="card-container" data-start="-200">
+                        <div class="card">
+                            0번
+                        </div>
+                    </div>
+                    </div>
+                    <img class="arrow" src="../static/img/arrow-right.png" alt="arrow">
+              </div>
+            </div>
+        </div>
+    </section>
+    <script>
+
+        
+        for(let i = 0; i<5;i++){
+            let newNode = document.createElement("div");
+            newNode.classList.add("card");
+            newNode.textContent = (i+1)+ "번입니다";
+            document.querySelector(".card-container").appendChild(newNode);
+        }
+
+        let make_card_5 = ()=>{
+            for(let i = 0; i<5;i++){
+            let newNode = document.createElement("div");
+            newNode.classList.add("card");
+            newNode.textContent = (i+1)+ "번입니다";
+            document.querySelector(".card-container").appendChild(newNode);
+            }   
+        };
+        
+        const card_container = document.querySelector(".card-container");
+        const arrows = document.querySelectorAll(".arrow");
+        const left_arrow = arrows[0];
+        left_arrow.style.opacity = 0.3;
+        const right_arrow = arrows[1];
+        
+        const cards = document.querySelectorAll(".card");
+        let zero_card =cards[0];
+        zero_card.classList.add("zero-card"); // 보이지 않을 카드 => 형식상
+        
+        let first_card = cards[1];
+        first_card.classList.add("first-card"); //현재 첫번째 카드
+        card_container.style.transform = "translate(-200px,0)";
+        
+
+            
+
+        const clickToLeft = ()=>{
+            let start_line = parseInt(card_container.dataset.start);
+            start_line = start_line+400;
+
+            card_container.style.transition = "transform 1s";
+            card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
+            card_container.dataset.start = start_line;
+
+            first_card.classList.remove("first-card");
+            first_card = first_card.previousElementSibling;
+            first_card.classList.add("first-card");
+
+
+            if(parseInt(card_container.dataset.start) == -200 || parseInt(card_container.dataset.start) > -200){
+                left_arrow.removeEventListener("click",clickToLeft);
+                left_arrow.style.opacity = 0.3;
+            }
+        }
+
+        const clickToRight = ()=>{
+            let start_line = parseInt(card_container.dataset.start);
+            start_line = start_line-400;
+
+            card_container.style.transition = "transform 1s";
+            card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
+            card_container.dataset.start = start_line;
+            
+            first_card.classList.remove("first-card");
+            first_card = first_card.nextElementSibling;
+            first_card.classList.add("first-card");
+
+
+            if(parseInt(card_container.dataset.start) < -200 ){
+                left_arrow.addEventListener("click",clickToLeft);
+                left_arrow.style.opacity = 1;
+            }
+
+
+            if(first_card.nextElementSibling == null){
+                make_card_5();
+            }
+
+        }
+
+        right_arrow.addEventListener("click",clickToRight);
+        
+    </script>
+</body>
+</html>
