@@ -93,10 +93,10 @@ body{
     box-shadow: 3px 3px 5px 0.1px #3366FF;
 }
 
-/* list */
-
 .list-container{
     padding-top:50px;
+    width:80%;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -104,7 +104,7 @@ body{
 }
 
 .list-window{
-    width:440px;
+    width:640px;
     overflow: hidden;
 }
 .lists{
@@ -118,14 +118,14 @@ body{
 
 .list{
     margin : 0 20px;
-    width:400px;
+    width:600px;
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
 .list-title{
-    width:400px;
+    width:600px;
     height:50px;
     background-color: #fff;
     border-radius: 10px;
@@ -135,7 +135,7 @@ body{
 }
 
 .list-content{
-    width:400px;
+    width:600px;
     height:400px;
     background-color: #fff;
     border-radius: 10px;
@@ -145,7 +145,7 @@ body{
 
 }
 .list-comment{
-    width:400px;
+    width:600px;
     height:100px;
     background-color: #fff;
     border-radius: 10px;
@@ -165,6 +165,7 @@ body{
     transition: transform 0.5s;
     transform: translate(0, -5px);
 }
+
 
 .modal{
     position: absolute;
@@ -189,9 +190,9 @@ body{
     opacity: 1;
 }
 
- .current-list{
+/* .current-list{
     background-color: black;
-}
+} */
 
 /* .modal.show{
     display: block;

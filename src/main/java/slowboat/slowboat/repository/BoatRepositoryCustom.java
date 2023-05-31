@@ -12,7 +12,12 @@ public interface BoatRepositoryCustom {
    Boat findMaxBoat();
 
    int findMaxBoatId();
-   Boat findBoatRandomly();
+   Boat getBoatRandomly();
 
    Page<Boat> getBoatByCategory(Category category, Pageable pageable);
+
+    Page<Boat> getBoatAll(Pageable pageable);
+
+    Boat getBoatOrderly(int id);
+
 }

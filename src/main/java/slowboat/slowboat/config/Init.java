@@ -9,6 +9,7 @@ import slowboat.slowboat.service.BoatService;
 import slowboat.slowboat.service.WriterService;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +20,6 @@ public class Init {
 
     @PostConstruct
     public void init(){
-
 
         Writer writer1 = new Writer("aaaa","릴리","1111","USER");
         Writer writer2 = new Writer("bbbb","오해원","2222","USER");
@@ -35,13 +35,18 @@ public class Init {
         writerService.saveWriter(writer5);
         writerService.saveWriter(writer6);
 
+        ArrayList<Writer> writers = new ArrayList<>();
+        writers.add(writer1);
+        writers.add(writer2);
+        writers.add(writer3);
+        writers.add(writer4);
+        writers.add(writer5);
 
-        boatService.save(new Boat("엔믹스", "릴리", Category.CREATION, writer1));
-        boatService.save(new Boat("엔믹스", "오해원", Category.CREATION, writer2));
-        boatService.save(new Boat("엔믹스", "설윤", Category.CREATION, writer3));
-        boatService.save(new Boat("엔믹스", "배진솔", Category.CREATION, writer4));
-        boatService.save(new Boat("엔믹스", "지우", Category.CREATION, writer5));
-        boatService.save(new Boat("엔믹스", "장규진", Category.CREATION, writer6));
+        for(int i = 0 ; i< 30; i++){
+            int index = i% 5;
+            boatService.save(new Boat("엔믹스"+i, "핑크플로이드"+i , Category.CREATION, writers.get(index)));
+        }
+
     }
 
 }

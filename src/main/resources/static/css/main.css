@@ -81,6 +81,9 @@ body{
     justify-content: space-around;
     align-items: center;
 }
+
+
+/*card 정리*/
 .card-window{
     width:80%;
     height: 300px;
@@ -106,7 +109,44 @@ body{
     margin: auto 50px;
     border-radius: 10px 10px;
     box-shadow: 3px 3px 10px 0.1px #6690FF;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.card-content{
+    width: 90%;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+}
+
+.card-text-container{
+    align-self: center;
+    height: 110px;
+    font-size: 1.1rem;
+    font-weight: 300;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-text{
+    width: 100%;
+    height: auto;
+    max-height: 110px;
+    overflow :scroll;
+}
+
+.card-footer{
+    display: flex;
+    align-self: end;
+}
+
 
 .first-card{
     transition: transform 1s;

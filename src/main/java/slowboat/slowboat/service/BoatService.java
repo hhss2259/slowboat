@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import slowboat.slowboat.error.LastBoatException;
 import slowboat.slowboat.model.Entity.Boat;
 import slowboat.slowboat.model.Entity.Category;
 import slowboat.slowboat.repository.BoatRepository;
@@ -26,14 +27,30 @@ public class BoatService {
 
 
     public Boat getBoatRandomly(){
-        Boat boatRandomly = boatRepository.findBoatRandomly();
-
+        Boat boatRandomly = boatRepository.getBoatRandomly();
         return boatRandomly;
     }
 
 
     public Page<Boat> getBoatByCategory(Category category, Pageable pageable) {
-        Page<Boat> boatByCategory = boatRepository.getBoatByCategory(category, pageable);
-        return boatByCategory;
+
+        Page<Boat> boats;
+        if(category == Category.ALL){
+            boats = boatRepository.getBoatAll(pageable);
+        }else{
+            boats = boatRepository.getBoatByCategory(category, pageable);
+        }
+        return boats;
+    }
+
+    public Boat getBoatOrderly(int id) {
+        if(id == 0){
+            id = boatRepository.findMaxBoatId()+1;
+        }
+        if(id == 1){
+            throw new LastBoatException();
+        }
+        Boat boatOrderly = boatRepository.getBoatOrderly(id);
+        return boatOrderly;
     }
 }

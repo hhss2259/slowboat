@@ -18,7 +18,7 @@ public class MainController {
 
     @GetMapping("/myInfo")
     String getMyIfo(){
-        return "myInfo ";
+        return "myInfo";
     }
 
 

@@ -1,5 +1,6 @@
 package slowboat.slowboat.controller.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import slowboat.slowboat.model.Entity.Boat;
 import slowboat.slowboat.model.Entity.Category;
+import slowboat.slowboat.model.basic.BoatByCategoryResponseDto;
+import slowboat.slowboat.model.basic.DefaultPage;
 import slowboat.slowboat.model.basic.DefaultRes;
 import slowboat.slowboat.service.BoatService;
+
+import javax.naming.Name;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,13 +28,32 @@ public class BoatController {
     private final BoatService boatService;
 
 
-    @GetMapping("/boat")
+    @GetMapping("/boat/random")
     DefaultRes getBoatByRandom(){
         Boat boatRandomly = boatService.getBoatRandomly();
-        return DefaultRes.res(20001, "랜덤 boat", boatRandomly);
+        BoatResponseDto responseDto = new BoatResponseDto(boatRandomly.getId(), boatRandomly.getWriter().getNickname(), boatRandomly.getCreatedTime(), boatRandomly.getLikes(), boatRandomly.getContent(), boatRandomly.getTitle());
+        return DefaultRes.res(20001, "랜덤 boat", responseDto);
     }
 
+    @GetMapping("/boat/order")
+    DefaultRes getBoatByRandom(@RequestParam int id){
+        Boat boatRandomly = boatService.getBoatOrderly(id);
+        BoatResponseDto responseDto = new BoatResponseDto(boatRandomly.getId(), boatRandomly.getWriter().getNickname(), boatRandomly.getCreatedTime(), boatRandomly.getLikes(), boatRandomly.getContent(), boatRandomly.getTitle());
+        return DefaultRes.res(20001, "순서 boat", responseDto);
+    }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BoatResponseDto {
+        int id;
+        String nickname;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy년 MM월 dd일", timezone="Asia/Seoul")
+        LocalDateTime createdTime;
+        int likes;
+        String content;
+        String title;
+    }
     @PostMapping("/boat")
     DefaultRes saveBoat(@RequestBody BoatSaveDto dto){
         System.out.println("dto.getTitle() = " + dto.getTitle());
@@ -38,11 +65,10 @@ public class BoatController {
     }
 
     @GetMapping("/boat/category")
-    DefaultRes getBoatByCategory(@RequestParam("category") Category category, @PageableDefault(size = 20, page = 0) Pageable pageable){
+    DefaultPage getBoatByCategory(@RequestParam("category") Category category, @PageableDefault(size = 20, page = 0) Pageable pageable){
 
         Page<Boat> boatByCategory = boatService.getBoatByCategory(category, pageable);
-
-        return DefaultRes.res(20004,"boat list", boatByCategory);
+        return DefaultPage.res(20004, "boat category list", boatByCategory);
 
     }
 

@@ -16,24 +16,21 @@
 
 
 
-    <link rel ="stylesheet" href="../static/css/common/basic.css"/> 
-    <link rel ="stylesheet" href="../static/css/category.css"/>
+<!--<link rel ="stylesheet" href="../static/css/common/basic.css"/>-->
+<!--<link rel ="stylesheet" href="../static/css/category.css"/>-->
 
+
+    <link rel ="stylesheet" href="/css/common/basic.css"/>
+    <link rel ="stylesheet" href="/css/category.css"/>
 </head>
 <body>
     <header>
         <div class="inner">
             <div class="header-container">
                 <div class="nav-container">
-                    <div class="nav-menu">
-                        메인화면
-                    </div>
-                    <div class="nav-menu">
-                        카테고리
-                    </div>
-                    <div class="nav-menu">
-                        내 정보
-                    </div>
+                    <a href="/"><div class="nav-menu">주 화면</div></a>
+                    <a href="/category"><div class="nav-menu">찾아보기</div></a>
+                    <a href="/myInfo"><div class="nav-menu">내 정보</div></a>
                 </div>
                 <div class="header-title">
                     삶을 더 풍요롭게
@@ -57,24 +54,14 @@
                 </div>
                 <div class="list-container">
                     <img class="arrow" src="../static/img/arrow-left_1.png" alt="arrow">
-                    <div class="list-window">
+                    <div class="list-window" data-pageNumber="0" data-totalPages="0" data-numberOfElements="0" data-pageSize="0">
                         <div class="lists" data-start="0">
-                            <div class="list">
-                                <div class="list-title">1</div>
-                                <div class="list-content"></div>
-                                <div class="list-comment"></div>
-                            </div>
-                            <div class="list">
-                                <div class="list-title">2</div>
-                                <div class="list-content"></div>
-                                <div class="list-comment"></div>
-                            </div>
-                            <div class="list">
-                                <div class="list-title">3</div>
-                                <div class="list-content"></div>
-                                <div class="list-comment"></div>
-                            </div>
-                            </div>
+<!--                            <div class="list">-->
+<!--                                <div class="list-title">1</div>-->
+<!--                                <div class="list-content"></div>-->
+<!--                                <div class="list-comment"></div>-->
+<!--                            </div>-->
+                        </div>
                     </div>    
                     <img class="arrow" src="../static/img/arrow-right_1.png" alt="arrow">
                 </div>
@@ -82,14 +69,9 @@
         </div>
     </section>
 
-    <div class="modal">
-        <div class="modal_body">Modal</div>
-    </div>
-
-
     <script>
         let categories = [...document.querySelectorAll(".category")];
-        for(category of categories){
+        for(let category of categories){
             category.addEventListener("click", (e)=>{
                 for(c of categories){
                     c.classList.remove("selected");
@@ -98,103 +80,114 @@
             });
         }
 
-    
-        const arrows = [...document.querySelectorAll(".arrow")];
-        const left_arrow = arrows[0];
-        left_arrow.style.opacity = 0.1;
-        const right_arrow = arrows[1];
-        document.querySelector(".list").classList.add("current-list");
 
-        
+        let right_arrow = document.querySelectorAll(".arrow")[1];
 
-        let right_move=()=>{
+        // 리스트 하나를 만든다.
+        let make_list = (response, i)=>{
+
+                let list =  document.createElement("div");
+                list.classList.add("list");
+                let list_title =  document.createElement("div");
+                list_title.classList.add("list-title")
+                let list_content =  document.createElement("div");
+                list_content.classList.add("list-content");
+                let list_comment =  document.createElement("div");
+                list_comment.classList.add("list-comment")
+
+                list_title.textContent = response.data[i].title;
+                list_content.textContent = response.data[i].content;
+                list_comment.textContent = response.data[i].nickname;
+
+                list.dataset.nthOfPage = i+1;
+                list.dataset.id = response.data[i].id;
+
+                list.appendChild(list_title);
+                list.appendChild(list_content);
+                list.appendChild(list_comment);
+
+                document.querySelector(".lists").appendChild(list);
+
+        }
+
+
+        //오른쪽으로 이동한다.
+        let move_right = ()=>{
             let lists = document.querySelector(".lists");
-            let start_line = parseInt(lists.dataset.start);
-            
-            start_line = start_line -640;
-            
-            lists.style.transition = "transform 1s";
-            lists.style.transform = "translate("+start_line+"px, 0)";
-            lists.dataset.start = start_line;
+            let start = parseInt(lists.dataset.start);
+            start = start -440;
 
-            if(start_line< 0){
-                left_arrow.addEventListener("click",left_move);
-                left_arrow.style.opacity = 1;
-            }
+            lists.style.transition = "transform 1s";
+            lists.style.transform = "translate("+String(start)+"px, 0px)";
+            lists.dataset.start = String(start);
+
+            document.querySelector(".current-list").nextElementSibling.classList.add("current-list");
+            document.querySelector(".current-list").classList.remove("current-list");
+        }
+
+
+
+        let fetch_right = ()=>{
+            let list_window = document.querySelector(".list-window");
+            let pageNumber = Number(list_window.dataset.pageNumber);
+            let totalPages = Number(list_window.dataset.totalPages);
+            let numberOfElements = Number(list_window.dataset.numberOfElements);
+            let pageSize = Number(list_window.dataset.pageSize);
 
             let current_list = document.querySelector(".current-list");
-            console.log(current_list);
-            current_list.classList.remove("current-list")
-            console.log(current_list.nextElementSibling);
-            current_list.nextElementSibling.classList.add("current-list");
-            
+            let current_nthOfPage = Number(current_list.dataset.nthOfPage);
 
-            if(document.querySelector(".current-list").nextElementSibling == null){
-                (function make_list(){
-                    let newNode = document.createElement("div");
-                    let newTitle = document.createElement("div");
-                    let newContent = document.createElement("div");
-                    let newComment = document.createElement("div");
-                    newNode.classList.add("list");
-                    newTitle.classList.add("list-title");
-                    newContent.classList.add("list-content");
-                    newComment.classList.add("list-comment");
-                    newNode.appendChild(newTitle);
-                    newNode.appendChild(newContent);
-                    newNode.appendChild(newComment);
-                    document.querySelector(".lists").appendChild(newNode);
 
-                }());
+            if(current_nthOfPage+1<numberOfElements) {
+                move_right();
+                return; //아직 페이지가 뒤에 더 남아있다면 그냥 오른쪽으로 이동
             }
 
-        }
-
-        let left_move=()=>{
-            let lists = document.querySelector(".lists");
-            let start_line = parseInt(lists.dataset.start);
-            
-            start_line = start_line + 640;
-            
-            lists.style.transition = "transform 1s";
-            lists.style.transform = "translate("+start_line+"px, 0)";
-            lists.dataset.start = start_line;
-        
-            if(start_line > 0 || start_line==0){
-                left_arrow.removeEventListener("click", left_move);
-                left_arrow.style.opacity = 0.1;
+            if(pageNumber+1==totalPages) {
+                console.log("마지막 페이지");
+                right_arrow.removeEventListener("click", fetch_right);
+                right_arrow.style.opacity = "0.1";
+                return; //이게 마지막 페이지라면 !!! 더 이상 오른쪽으로 움직일 수 없다
             }
 
-            
-            let current_list = document.querySelector(".current-list");
-            current_list.classList.remove("current-list")
-            current_list.previousElementSibling.classList.add("current-list");
+            //마지막 페이지가 아니라면 추가가 필요하다!!!
+            fetch(`/boat/category?category=ALL&page=${pageNumber+1}`)
+                .then(response=>response.json())
+                .then(response=>{
+
+                })
 
         }
 
 
-        right_arrow.addEventListener("click", right_move);
+
+        /*일단 맨 처음 ALL 카테고리에서 20개를 가져온다*/
+        fetch("/boat/category?category=ALL&page=0")
+            .then(response => response.json())
+            .then(response => {
+                for(let i = 0 ; i<response.data.length; i++){
+
+                    make_list(response, i);
+                }
+
+                let list_window = document.querySelector(".list-window");
+                list_window.dataset.pageNumber = response.pageNumber;
+                list_window.dataset.totalPages = response.totalPages;
+                list_window.dataset.numberOfElements = response.numberOfElements;
+                list_window.dataset.pageSize = response.pageSize;
+               })
+            .then(()=>{
+                let first_list = document.querySelector(".list");
+                first_list.classList.add("current-list");
+                right_arrow.addEventListener("click", fetch_right);
+             })
 
 
-        let modal = document.querySelector(".modal");
-        let body = document.querySelector("body");
-        let lists = document.querySelectorAll(".list");
-        let arr_lists = [...lists];
 
-        modal.addEventListener("click",()=>{
-            modal.style.display = "none";
-            body.style.overflow = 'auto'
-        })
 
-        for(list of arr_lists){
-            list.addEventListener("click", ()=>{
-                // console.log("hi");
-                modal.style.display = "block";
-                body.style.overflow = "hidden";
-                // console.log("bye");
-                // modal.classList.add("show");
-                
-            })
-        }
+
+
+
 
 
     </script>

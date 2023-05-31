@@ -1,0 +1,261 @@
+body{
+    background-color: #D6E4FF;
+}
+/* header */
+.header-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 200px;
+    align-items: flex-start;
+    justify-content: start;
+    background-color: #ADC8FF;
+    padding-left: 100px;
+       
+}
+
+.header-title{
+    font-weight: bold;
+    color:#100505;
+    font-size: 2.0rem;
+    margin-bottom:10px;
+}
+
+.header-content{
+    font-weight: 200;
+    font-size: 1.5rem;
+    color:#100505;
+}
+
+.nav-container{
+    width: 500px;
+    height: 40px;
+    display: flex;
+    background-color: #D6E4FF;
+    border-radius: 20px 20px;
+    align-self:  flex-end;
+    margin-top:30px;
+    margin-right:20px;
+    justify-content: space-around;
+    box-shadow: 3px 3px 10px 0.1px #6690FF;
+}
+.nav-menu{
+    font-size:1.2rem;
+    color:#102693;
+    line-height: 40px;
+    font-weight: 600;
+    
+}
+.nav-menu:hover{
+    transition: transform 0.5s;
+    transform: translate(0, -5px);
+}
+
+/*<<<<<<<<main>>>>>>>>*/
+.main-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color:#ADC8FF;
+    flex-direction: column;
+    justify-content: center;
+}
+.main-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.welcome-message{
+    flex-direction: column;
+    writing-mode: vertical-lr;
+    color: #FFFAD9;
+    padding-right:10px;
+}
+
+.main-nickname-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+}
+.main-nickname{
+    padding-left: 50px;
+    margin-top: 100px;
+    font-size:2.5rem;
+    font-weight: bold;
+
+}
+
+.main-summary{
+    padding-left: 50px;
+    margin-top: 20px;
+    font-size:1.2rem;
+
+}
+
+.main-nickname-update{
+    margin-top: 20px;
+    align-self: flex-end;
+}
+
+
+/*Main Content*/
+
+.main-content{
+    margin : auto auto;
+    width: 90%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+}
+.main-content-title{
+    font-size: 2.0rem;
+    font-weight: bold;
+    height: 80px;
+    line-height: 80px;
+}
+.main-content-content{
+    width:100%;
+    height: auto;
+    
+    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    flex-wrap : wrap;
+    justify-content: start;
+}
+.profile{
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+    background-color: #fff;
+}
+.profile-image-container{
+    min-width: 250px;
+    min-height: 250px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    
+}
+.profile-image{
+    min-height: 150px;
+    max-height: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    border-radius: 75px 75px;
+    border: 1px solid black;
+}
+.profile-text-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 250px;
+    width: 100%;
+    border: 1px solid black;
+    padding-top:20px;
+   
+}
+
+.profile-text{
+    width: 90%;
+    height: 90%;
+    border: 1px solid black;
+    overflow: scroll;
+}
+
+.myBoat-container{
+    width: 100%;
+    height: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap : wrap;
+
+}
+
+.myBoat-title{
+    font-size: 2.0rem;
+    font-weight: bold;
+    height: 80px;
+    line-height: 80px;
+}
+.myBoat-content-container{
+    width: 100%;
+    height: 360px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.myBoat-lists{
+    width: 90%;
+}
+.myBoat-list{
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 10px;
+    border-bottom: 1px solid black;
+}
+
+.myBoat-pages{
+    width: 100px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.myLikes-container{
+    width: 100%;
+    height: auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap : wrap;
+
+}
+
+.myLikes-title{
+    font-size: 2.0rem;
+    font-weight: bold;
+    height: 80px;
+    line-height: 80px;
+    margin-top: 50px;
+}
+.myLikes-content-container{
+    width: 100%;
+    height: 360px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.myLikes-lists{
+    width: 90%;
+}
+.myLikes-list{
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 10px;
+    border-bottom: 1px solid black;
+}
+
+.myLikes-pages{
+    width: 100px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

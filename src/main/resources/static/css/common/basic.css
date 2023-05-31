@@ -3,11 +3,11 @@
     box-sizing: border-box;
 }
 
-body::-webkit-scrollbar{
+*::-webkit-scrollbar{
     display: none; /* Chrome, Safari, Opera*/
 }
 
-body{
+*{
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }

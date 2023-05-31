@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Category {
+    ALL("모두",0),
     LITERATURE("문학",1),
     PHILOSOPHY("철학",2),
     SELF("자기 계발",3),

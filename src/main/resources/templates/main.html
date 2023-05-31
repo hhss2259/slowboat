@@ -16,24 +16,21 @@
 
 
 
-    <link rel ="stylesheet" href="../static/css/common/basic.css"/> 
-    <link rel ="stylesheet" href="../static/css/main.css"/>
+<!--   <link rel ="stylesheet" href="../static/css/common/basic.css"/> -->
+<!--    <link rel ="stylesheet" href="../static/css/main.css"/>-->
 
+
+     <link rel ="stylesheet" href="/css/common/basic.css"/>
+     <link rel ="stylesheet" href="/css/main.css"/>
 </head>
 <body>
     <header>
         <div class="inner">
             <div class="header-container">
                 <div class="nav-container">
-                    <div class="nav-menu">
-                        메인화면
-                    </div>
-                    <div class="nav-menu">
-                        카테고리
-                    </div>
-                    <div class="nav-menu">
-                        내 정보
-                    </div>
+                    <a href="/"><div class="nav-menu">주 화면</div></a>
+                    <a href="/category"><div class="nav-menu">찾아보기</div></a>
+                    <a href="/myInfo"><div class="nav-menu">내 정보</div></a>
                 </div>
                 <div class="header-title">
                     삶을 더 풍요롭게
@@ -55,9 +52,25 @@
                     <img class="arrow" src="../static/img/arrow-left.png" alt="arrow">
                     <div class="card-window">
                     <div class="card-container" data-start="-200">
-                        <div class="card">
+                        <div class="card zero-card">
                             0번
                         </div>
+<!--                        <div class="card">-->
+<!--                            <div class="card-content">-->
+<!--                                <div class="card-date">-->
+<!--                                    2025년 5월 30일-->
+<!--                                </div>-->
+<!--                                <div class="card-text-container">-->
+<!--                                    <div class="card-text">-->
+<!--                                        "핑크 플로이드는 ㄹㅇ 전설이다"-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="card-footer">-->
+<!--                                    <div class="card-by">by 핑크플로이드</div>-->
+<!--                                     <div class="card-likes">10</div>   -->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     </div>
                     <img class="arrow" src="../static/img/arrow-right.png" alt="arrow">
@@ -67,52 +80,166 @@
     </section>
     <script>
 
-        
-        for(let i = 0; i<5;i++){
-            let newNode = document.createElement("div");
-            newNode.classList.add("card");
-            newNode.textContent = (i+1)+ "번입니다";
-            document.querySelector(".card-container").appendChild(newNode);
-        }
-
-        let make_card_5 = ()=>{
-            for(let i = 0; i<5;i++){
-            let newNode = document.createElement("div");
-            newNode.classList.add("card");
-            newNode.textContent = (i+1)+ "번입니다";
-            document.querySelector(".card-container").appendChild(newNode);
-            }   
-        };
-        
         const card_container = document.querySelector(".card-container");
         const arrows = document.querySelectorAll(".arrow");
         const left_arrow = arrows[0];
         left_arrow.style.opacity = 0.3;
         const right_arrow = arrows[1];
-        
         const cards = document.querySelectorAll(".card");
         let zero_card =cards[0];
         zero_card.classList.add("zero-card"); // 보이지 않을 카드 => 형식상
-        
-        let first_card = cards[1];
-        first_card.classList.add("first-card"); //현재 첫번째 카드
-        card_container.style.transform = "translate(-200px,0)";
-        
 
-            
 
-        const clickToLeft = ()=>{
+
+        // card를 만든다!!
+        let make_card= ()=>{
+                let card = document.createElement("div");
+                card.classList.add("card");
+                let card_content = document.createElement("div");
+                card_content.classList.add("card-content");
+                let card_date = document.createElement("div");
+                card_content.classList.add("card-date");
+                let card_text_container = document.createElement("div");
+                card_text_container.classList.add("card-text-container");
+                let card_text = document.createElement("div");
+                card_text.classList.add("card-text");
+                let card_footer = document.createElement("div");
+                card_footer.classList.add("card-footer");
+                let card_by = document.createElement("div");
+                card_by.classList.add("card-by");
+                let card_likes = document.createElement("div");
+                card_likes.classList.add("card-likes");
+
+                card_footer.appendChild(card_by);
+                card_footer.appendChild(card_likes);
+                card_text_container.appendChild(card_text);
+                card_content.appendChild(card_date);
+                card_content.appendChild(card_text_container);
+                card_content.appendChild(card_footer);
+                card.appendChild(card_content);
+
+                return {
+                    "card_by" : card_by,
+                    "card_likes" : card_likes,
+                    "card_text" : card_text,
+                    "card_date" : card_date,
+                    "card":card
+                };
+        };
+
+
+        // 만들어진 카드를 setting 한다.
+        let set_card = (response)=>{
+            let unSetCard = make_card();
+            unSetCard.card_by.textContent = response.data.nickname;
+            unSetCard.card_likes.textContent = response.data.likes;
+            unSetCard.card_text.textContent = response.data.content;
+            unSetCard.card_date.textContent = response.data.createdTime;
+
+            unSetCard.card.dataset.cardId = response.data.id;
+            card_container.appendChild(unSetCard.card);
+            return unSetCard.card;
+        }
+
+
+        //main 을 처음 켰을 때 맨 앞에 보이는 첫번째 카드와 두 번째 카드를 만든다
+        fetch(`/boat/order?id=0`)
+            .then(response=> response.json())
+            .then(response =>{
+                let setCard = set_card(response);
+                setCard.classList.add("first-card");
+                return setCard;
+            })
+            .then((newCard)=>{
+                let start_line = parseInt(card_container.dataset.start);
+                card_container.style.transition = "transform 1s";
+                card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
+                card_container.dataset.start = String(start_line);
+
+                if(parseInt(card_container.dataset.start) < -200 ){
+                    left_arrow.addEventListener("click",clickToLeft);
+                    left_arrow.style.opacity = 1;
+                }
+            })
+            .then(()=>{
+                fetch(`/boat/order?id=${document.querySelector(".first-card").dataset.cardId}`)
+                    .then(response=> response.json())
+                    .then(response =>{
+                        let setCard = set_card(response);
+                        return setCard;
+                    })
+           })
+
+
+
+        // 오른쪽 화살표를 눌렀을 때 움직이는 기능
+        let move_right = ()=>{
+                let start_line = parseInt(card_container.dataset.start);
+                start_line = start_line-400;
+
+                card_container.style.transition = "transform 1s";
+                card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
+                card_container.dataset.start = String(start_line);
+
+
+                document.querySelector(".first-card").nextElementSibling.classList.add("first-card");
+                document.querySelector(".first-card").classList.remove("first-card");
+
+                if(parseInt(card_container.dataset.start) < -200 ){
+                    left_arrow.addEventListener("click",clickToLeft);
+                    left_arrow.style.opacity = 1;
+                }
+            };
+
+        // 왼쪽 화살표를 눌렀을 때 움직이는 기능
+        let move_left = ()=>{
             let start_line = parseInt(card_container.dataset.start);
             start_line = start_line+400;
 
             card_container.style.transition = "transform 1s";
             card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
-            card_container.dataset.start = start_line;
+            card_container.dataset.start = String(start_line);
 
-            first_card.classList.remove("first-card");
-            first_card = first_card.previousElementSibling;
-            first_card.classList.add("first-card");
+            document.querySelector(".first-card").previousElementSibling.classList.add("first-card");
+            document.querySelectorAll(".first-card")[1].classList.remove("first-card");
+        }
 
+
+        // 오른쪽으로 움직일 때!!! 카드를 만들 필요가 있으면 만들어 오는 것까지 같이 동작한다.
+        let fetch_right = ()=> {
+            // 만약 이미 뒤에 카드가 만들어진 경우, 즉 오른쪽으로 한 번 갔다가 왼쪽으로 이동하는 경우.
+            // 오른쪽으로 움직이기만 하면 된다(이미 카드를 만들어놨으니 더 이상 만들 필요가 없다)
+            if(document.querySelector(".first-card").nextElementSibling.nextElementSibling != null){
+                move_right();
+                return ;
+            }
+
+            //카드를 만들어야 할 때
+            fetch(`/boat/order?id=${document.querySelector(".first-card").nextElementSibling.dataset.cardId}`)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.data.statusCode == 40005) {
+                        throw new Error("마지막 Boat");
+                    }
+                    set_card(response);
+                })
+                .then(() => {
+                    move_right();
+                })
+                .catch(() => {
+                        move_right();
+                        let right_arrow = document.querySelectorAll(".arrow")[1];
+                        right_arrow.removeEventListener("click", fetch_right);
+                        right_arrow.style.opacity = "0.1";
+                    }
+                );
+        }
+
+        // 왼쪽 화살표를 눌렀을 때 움직이게 만들어준다.
+        const clickToLeft = ()=>{
+            move_left();
+            right_arrow.addEventListener("click",fetch_right);
+            right_arrow.style.opacity="1";
 
             if(parseInt(card_container.dataset.start) == -200 || parseInt(card_container.dataset.start) > -200){
                 left_arrow.removeEventListener("click",clickToLeft);
@@ -120,33 +247,46 @@
             }
         }
 
-        const clickToRight = ()=>{
-            let start_line = parseInt(card_container.dataset.start);
-            start_line = start_line-400;
 
-            card_container.style.transition = "transform 1s";
-            card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
-            card_container.dataset.start = start_line;
-            
-            first_card.classList.remove("first-card");
-            first_card = first_card.nextElementSibling;
-            first_card.classList.add("first-card");
+        right_arrow.addEventListener("click",fetch_right);
 
 
-            if(parseInt(card_container.dataset.start) < -200 ){
-                left_arrow.addEventListener("click",clickToLeft);
-                left_arrow.style.opacity = 1;
-            }
 
 
-            if(first_card.nextElementSibling == null){
-                make_card_5();
-            }
 
-        }
+        // const clickToRight = ()=>{
+        //     let start_line = parseInt(card_container.dataset.start);
+        //     start_line = start_line-400;
+        //
+        //     card_container.style.transition = "transform 1s";
+        //     card_container.style.transform = "translate("+String(start_line)+"px, 0px)";
+        //     card_container.dataset.start = String(start_line);
+        //
+        //     first_card.classList.remove("first-card");
+        //     first_card = first_card.nextElementSibling;
+        //     first_card.classList.add("first-card");
+        //
+        //
+        //     if(parseInt(card_container.dataset.start) < -200 ){
+        //         left_arrow.addEventListener("click",clickToLeft);
+        //         left_arrow.style.opacity = 1;
+        //     }
+        //
+        //
+        //     if(first_card.nextElementSibling == null){
+        //         make_card();
+        //     }
+        //
+        // }
 
-        right_arrow.addEventListener("click",clickToRight);
-        
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>

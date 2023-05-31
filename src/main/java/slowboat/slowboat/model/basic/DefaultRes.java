@@ -23,4 +23,7 @@ public class DefaultRes <T>{
     public static<T> DefaultRes<T> res(final int statusCode, final String message, T data){
         return new DefaultRes<T>(statusCode, message, data);
     }
+    public static<T> DefaultRes<T> res(final int statusCode, final String message){
+        return new DefaultRes<T>(statusCode, message);
+    }
 }
