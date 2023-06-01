@@ -147,6 +147,27 @@ body{
     align-self: end;
 }
 
+.card-by{
+
+}
+.card-likes{
+    margin-left:50px;
+    display:flex;
+    width: auto;
+}
+
+.heart{
+    width:20px;
+    height:20px;
+    opacity: 0.5;
+}
+
+.heart:hover{
+    opacity: 1;
+    transition: transform 0.5s;
+    transform: translate(0, -5px);
+ }
+
 
 .first-card{
     transition: transform 1s;

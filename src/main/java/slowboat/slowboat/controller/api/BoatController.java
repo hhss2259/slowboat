@@ -65,7 +65,7 @@ public class BoatController {
     }
 
     @GetMapping("/boat/category")
-    DefaultPage getBoatByCategory(@RequestParam("category") Category category, @PageableDefault(size = 20, page = 0) Pageable pageable){
+    DefaultPage getBoatByCategory(@RequestParam("category") Category category, @PageableDefault(size = 5, page = 0) Pageable pageable){
 
         Page<Boat> boatByCategory = boatService.getBoatByCategory(category, pageable);
         return DefaultPage.res(20004, "boat category list", boatByCategory);

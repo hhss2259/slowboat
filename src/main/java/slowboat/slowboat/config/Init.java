@@ -11,7 +11,7 @@ import slowboat.slowboat.service.WriterService;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class Init {
 

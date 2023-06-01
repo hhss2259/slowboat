@@ -53,7 +53,7 @@
                     <div class="category">장문</div>
                 </div>
                 <div class="list-container">
-                    <img class="arrow" src="../static/img/arrow-left_1.png" alt="arrow">
+                    <img class="arrow" src="/img/arrow-left_1.png" alt="arrow">
                     <div class="list-window" data-pageNumber="0" data-totalPages="0" data-numberOfElements="0" data-pageSize="0">
                         <div class="lists" data-start="0">
 <!--                            <div class="list">-->
@@ -63,7 +63,7 @@
 <!--                            </div>-->
                         </div>
                     </div>    
-                    <img class="arrow" src="../static/img/arrow-right_1.png" alt="arrow">
+                    <img class="arrow" src="/img/arrow-right_1.png" alt="arrow">
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
             });
         }
 
-
+        let left_arrow = document.querySelectorAll(".arrow")[0];
         let right_arrow = document.querySelectorAll(".arrow")[1];
 
         // 리스트 하나를 만든다.
@@ -128,6 +128,8 @@
 
 
         let fetch_right = ()=>{
+            left_arrow.addEventListener("click", clickToLeft);
+
             let list_window = document.querySelector(".list-window");
             let pageNumber = Number(list_window.dataset.pageNumber);
             let totalPages = Number(list_window.dataset.totalPages);
@@ -137,25 +139,39 @@
             let current_list = document.querySelector(".current-list");
             let current_nthOfPage = Number(current_list.dataset.nthOfPage);
 
-
-            if(current_nthOfPage+1<numberOfElements) {
+            //아직 페이지가 뒤에 더 남아있다면 그냥 오른쪽으로 이동
+            if(current_nthOfPage<numberOfElements) {
+                console.log("이게 걸려야됨");
                 move_right();
-                return; //아직 페이지가 뒤에 더 남아있다면 그냥 오른쪽으로 이동
+                return;
             }
 
+            //마지막 페이지의 끝까지 왔으면 더 이상 넘길 수가 없다
             if(pageNumber+1==totalPages) {
+                console.log(pageNumber);
                 console.log("마지막 페이지");
                 right_arrow.removeEventListener("click", fetch_right);
                 right_arrow.style.opacity = "0.1";
                 return; //이게 마지막 페이지라면 !!! 더 이상 오른쪽으로 움직일 수 없다
             }
 
-            //마지막 페이지가 아니라면 추가가 필요하다!!!
+            //마지막 페이지가 아니라면 페이지를 추가한다.
             fetch(`/boat/category?category=ALL&page=${pageNumber+1}`)
                 .then(response=>response.json())
                 .then(response=>{
-
+                    for(let i = 0 ; i<response.data.length; i++){
+                        make_list(response, i);
+                    }
+                    let list_window = document.querySelector(".list-window");
+                    list_window.dataset.pageNumber = response.pageNumber;
+                    list_window.dataset.totalPages = response.totalPages;
+                    list_window.dataset.numberOfElements = response.numberOfElements;
+                    list_window.dataset.pageSize = response.pageSize;
                 })
+                .then(()=>{
+                    move_right();
+
+                });
 
         }
 
@@ -166,7 +182,6 @@
             .then(response => response.json())
             .then(response => {
                 for(let i = 0 ; i<response.data.length; i++){
-
                     make_list(response, i);
                 }
 
@@ -182,6 +197,34 @@
                 right_arrow.addEventListener("click", fetch_right);
              })
 
+
+        // 왼쪽 화살표를 눌렀을 때 움직이는 기능
+        let move_left = ()=>{
+            let lists = document.querySelector(".lists");
+            let start = parseInt(lists.dataset.start);
+            start = start + 440;
+
+            lists.style.transition = "transform 1s";
+            lists.style.transform = "translate("+String(start)+"px, 0px)";
+            lists.dataset.start = String(start);
+
+            document.querySelector(".current-list").previousElementSibling.classList.add("current-list");
+            document.querySelectorAll(".current-list")[1].classList.remove("current-list");
+        }
+
+
+        // 왼쪽 화살표를 눌렀을 때 움직이게 만들어준다.
+        const clickToLeft = ()=>{
+            move_left();
+            right_arrow.addEventListener("click",fetch_right);
+            right_arrow.style.opacity="1";
+
+            let lists = document.querySelector(".lists") ;
+            if(parseInt(lists.dataset.start) == 0 || parseInt(lists.dataset.start) > 0){
+                left_arrow.removeEventListener("click",clickToLeft);
+                left_arrow.style.opacity = 0.3;
+            }
+        }
 
 
 

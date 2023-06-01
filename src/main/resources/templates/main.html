@@ -16,12 +16,12 @@
 
 
 
-<!--   <link rel ="stylesheet" href="../static/css/common/basic.css"/> -->
-<!--    <link rel ="stylesheet" href="../static/css/main.css"/>-->
+<!-- <link rel ="stylesheet" href="../static/css/common/basic.css"/>  -->
+<!-- <link rel ="stylesheet" href="../static/css/main.css"/> -->
 
 
-     <link rel ="stylesheet" href="/css/common/basic.css"/>
-     <link rel ="stylesheet" href="/css/main.css"/>
+    <link rel ="stylesheet" href="/css/common/basic.css"/>
+    <link rel ="stylesheet" href="/css/main.css"/> 
 </head>
 <body>
     <header>
@@ -45,11 +45,11 @@
         <div class="inner">
             <div class="main-container">
                 <div class="main-title">
-                    <img class="surfing" src="../static/img/surfing.png" alt="surfing">
+                    <img class="surfing" src="/img/surfing.png" alt="surfing">
                     <div class=main-title-message>최신 글귀</div>
                 </div>
                 <div class="main-content">
-                    <img class="arrow" src="../static/img/arrow-left.png" alt="arrow">
+                    <img class="arrow" src="/img/arrow-left.png" alt="arrow">
                     <div class="card-window">
                     <div class="card-container" data-start="-200">
                         <div class="card zero-card">
@@ -73,7 +73,7 @@
 <!--                        </div>-->
                     </div>
                     </div>
-                    <img class="arrow" src="../static/img/arrow-right.png" alt="arrow">
+                    <img class="arrow" src="/img/arrow-right.png" alt="arrow">
               </div>
             </div>
         </div>
@@ -109,9 +109,18 @@
                 card_by.classList.add("card-by");
                 let card_likes = document.createElement("div");
                 card_likes.classList.add("card-likes");
+                let card_likes_image = document.createElement("img");
+                card_likes_image.classList.add("heart");
+                card_likes_image.src = "/img/heart.png";
+                let card_likes_count = document.createElement("div");
+                card_likes_count.classList.add("likes-count");
+
+                card_likes.appendChild(card_likes_image);
+                card_likes.appendChild(card_likes_count);
 
                 card_footer.appendChild(card_by);
                 card_footer.appendChild(card_likes);
+
                 card_text_container.appendChild(card_text);
                 card_content.appendChild(card_date);
                 card_content.appendChild(card_text_container);
@@ -119,6 +128,7 @@
                 card.appendChild(card_content);
 
                 return {
+                    "card_likes_count" : card_likes_count,
                     "card_by" : card_by,
                     "card_likes" : card_likes,
                     "card_text" : card_text,
@@ -132,7 +142,7 @@
         let set_card = (response)=>{
             let unSetCard = make_card();
             unSetCard.card_by.textContent = response.data.nickname;
-            unSetCard.card_likes.textContent = response.data.likes;
+            unSetCard.card_likes_count.textContent = response.data.likes;
             unSetCard.card_text.textContent = response.data.content;
             unSetCard.card_date.textContent = response.data.createdTime;
 
